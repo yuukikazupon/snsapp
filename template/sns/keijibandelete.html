@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action = "" method ="POST" enctype="multipart/form-data">{% csrf_token %}
+<p>{{ keijiban_delete.toukou }}</p>
+
+<p>{{ keijiban_delete.image }}</p>
+
+
+<p>{{ keijiban_delete.created_at }}</p>
+<input type = "submit" value = "削除">
+</form>
+<a href = "{% url 'list' %}">一覧画面へ戻る</a>
+
+{% if keijiban_delete.image.url != null %}
+  <p><img src = "{{ keijiban_delete.image.url }}" width=300px ></p>
+{% endif %}
+
+{% endblock %}

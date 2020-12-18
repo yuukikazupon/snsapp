@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action ="" method ="POST" enctype="multipart/form-data">{% csrf_token %}
+{{ profile_update.as_p }}
+
+<input type="submit" value = "保存">
+</form>
+
+<a href = "{% url 'list' %}">一覧画面へ戻る</a>
+
+{% if profile_update.icon.url != null %}
+<p><img src = "{{ profile_update.icon.url }}" width=300px ></p>
+{% endif %}
+
+
+
+
+{% endblock %}

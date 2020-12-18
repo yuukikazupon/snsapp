@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<form action = "" method ="POST" enctype="multipart/form-data">{% csrf_token %}
+
+  <p>{{ keijiban_update.as_p }}</p>
+
+<input type = "submit" value = "更新">
+</form>
+
+<a href = "{% url 'list' %}">一覧画面へ戻る</a>
+
+{% if keijiban_update.image.url != null %}
+aaaaaaaa
+<p><img src = "{{ keijiban_update.image.url }}" width=300px ></p>
+{% else %}
+bbbbbbbbb
+{% endif %}
+
+{% endblock %}

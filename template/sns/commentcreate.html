@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<form action = "" method ="POST">{% csrf_token %}
+
+  {{ comment }}
+<input type = "submit" value = "コメントする">
+</form>
+
+
+{% endblock %}

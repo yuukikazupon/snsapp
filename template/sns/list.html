@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for object in object_list %}
+
+
+  <p>投稿者:<a href = "{% url 'profiledetail' object.authorid %}">{{ object.username }}</a></p>
+  <p>{{ object.created_at }}</p>
+  <p>投稿：{{ object.toukou }}</p>
+
+  {% if object.image.url != null %}
+    <p><img src = "{{ object.image.url }}" width=300px ></p>
+
+  {% endif %}
+
+  {% if request.user.id == object.authorid %}
+    <div>
+      <a href = "{% url 'keijibanupdate' object.id %}">更新</a>
+      <a href = "{% url 'keijibandelete' object.id %}">削除</a>
+    </div>
+  {% endif %}
+
+  {% if request.user.id != object.authorid %}
+  <div>
+    <a href = "{% url 'good' object.id %}">いいね{{ object.good }}</a>
+  </div>
+  {% else %}
+    <p>いいね{{ object.good }}</p>
+  {% endif %}
+
+
+  <div>
+    {% for comment in comment_list %}
+      {% if comment.commentid_id  == object.id %}
+          <p>コメント：{{ comment.commentfield }}　{{ comment.commentprofileid.username }}さん　{{ comment.created_at }}</p>
+      {% endif %}
+    {% endfor %}
+    <a href = "{% url 'commentcreate' object.id %}">コメントする</a>
+  </div>
+
+
+{% endfor %}
+
+
+
+
+<p><a href = "{% url 'create' %}">新規投稿画面へ</a></p>
+<p><a href = "{% url 'profileupdate' %}">プロフィール編集画面へ</a></p>
+<p><a href = "{% url 'account_logout' %}">ログアウト</a></p>
+
+<div class = "pagination">
+  {% if object_list.has_previous %}
+    <a href = "{% url 'list' %}">&laquo;最初のページへ</a>
+    <a href = "{% url 'list' %}{{object_list.previous_page_number}}">&laquo;前へ</a>
+  {% endif %}
+
+  {% for num in object_list.paginator.page_range %}
+
+    {% if object_list.number == num %}
+      <span class="current">{{ object_list.number }}</span>
+    {% else %}
+      <a href="{% url 'list' %}{{ num }}">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if object_list.has_next %}
+    <a href="{% url 'list' %}{{ object_list.next_page_number }}">次へ&raquo;</a>
+    <a href="{% url 'list' %}{{ object_list.paginator.num_pages}}">最後のページへ&raquo;</a>
+  {% endif %}
+
+{{ user_list1 }}
+
+{% endblock content %}

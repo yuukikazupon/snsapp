@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>{{ profile_detail.username }}</p>
+<p>{{ profile_detail.age }}才</p>
+<p>{{ profile_detail.sex }}</p>
+<p>{{ profile_detail.address }}</p>
+{% if profile_detail.icon.url != null %}
+  <p><img src = "{{ profile_detail.icon.url }}" width=300px ></p>
+
+{% endif %}
+
+<p><a href = "{% url 'list' %}">投稿一覧画面へ戻る</a></p>
+{% endblock %}
