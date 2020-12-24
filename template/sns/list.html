@@ -47,6 +47,7 @@
 
 <p><a href = "{% url 'create' %}">新規投稿画面へ</a></p>
 <p><a href = "{% url 'profileupdate' %}">プロフィール編集画面へ</a></p>
+<p><a href = "{% url 'messagelist' request.user.id %}">メッセージ一覧画面へ</a></p>
 <p><a href = "{% url 'account_logout' %}">ログアウト</a></p>
 
 <div class = "pagination">
@@ -69,6 +70,6 @@
     <a href="{% url 'list' %}{{ object_list.paginator.num_pages}}">最後のページへ&raquo;</a>
   {% endif %}
 
-{{ user_list1 }}
+
 
 {% endblock content %}

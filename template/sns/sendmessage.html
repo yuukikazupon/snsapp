@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<form action = "" method ="POST" enctype="multipart/form-data">{% csrf_token %}
+
+  {{ sendmessage.as_p }}
+  
+<input type = "submit" value = "投稿">
+</form>
+
+
+{% endblock %}

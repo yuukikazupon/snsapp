@@ -10,6 +10,8 @@
   <p><img src = "{{ profile_detail.icon.url }}" width=300px ></p>
 
 {% endif %}
-
+{% if request.user.id != profile_detail.profileid_id %}
+<p><a href = "{% url 'sendmessage' profile_detail.profileid_id %}">メッセージを送る</a><p>
+{% endif %}
 <p><a href = "{% url 'list' %}">投稿一覧画面へ戻る</a></p>
 {% endblock %}
