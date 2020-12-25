@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile,Keijiban,Comment
+from .models import Profile,Keijiban,Comment,Message
 
 class KeijibanForm(forms.ModelForm) :
     class Meta :
@@ -20,3 +20,8 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ["commentfield"]
+
+class SendMessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ["message","image"]

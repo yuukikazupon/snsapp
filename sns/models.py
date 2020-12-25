@@ -44,3 +44,11 @@ class Comment(models.Model):
     commentprofileid=models.ForeignKey(Profile,on_delete=models.CASCADE)
     commentfield=models.TextField('コメント')
     created_at = models.DateTimeField(default=timezone.now)
+
+
+class Message(models.Model):
+    sendmessageid = models.ForeignKey('accounts.CustomUser',on_delete=models.CASCADE)
+    recievemessageid = models.ForeignKey(Profile,on_delete=models.CASCADE)
+    message = models.TextField('メッセージ')
+    image = models.ImageField(upload_to = "media/media/",null=True,blank=True)
+    created_at = models.DateTimeField(default=timezone.now)

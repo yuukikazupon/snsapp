@@ -98,6 +98,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
+
+DEFAULT_FROM_EMAIL = 'yuukikun539.bm@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'yuukikun539@gmail.com'
+EMAIL_HOST_PASSWORD = 'google_account_application_passwd'
+EMAIL_USE_TLS = True
+
+
+
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
@@ -117,7 +127,8 @@ LOGIN_URL='/accounts/login/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ACCOUNT_LOGOUT_ON_GET = True
 

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+  <h1>送信メッセージ一覧</h1>
+{{ send_list }}
+{% for message in send_message_list %}
+  <p>{{ message.message }}</p>
+  {% if message.image.url != null %}
+    <p><img src = "{{ message.image.url }}" width=300px ></p>
+  {% endif %}
+  <p>{{ message.created_at }}</p>
+  <p>{{ message.recievemessageid.username }}へ送信</p>
+
+{% endfor %}
+</div>
+
+<div>
+  <h1>受信メッセージ一覧</h1>
+{{ recieve_list }}
+{% for message in new_recieve_message_list %}
+  <p>{{ message.message }}</p>
+  {% if message.image.url != null %}
+    <p><img src = "{{ message.image.url }}" width=300px ></p>
+  {% endif %}
+  <p>{{ message.created_at }}</p>
+  <p>{{ message.username}}より受信</p>
+
+{% endfor %}
+
+</div>
+<p><a href = "{% url 'list' %}">投稿一覧画面へ</a></p>
+
+{% endblock content %}

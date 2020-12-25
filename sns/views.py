@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect
-from .forms import KeijibanForm,ProfileForm,CreateForm,CommentForm
+from .forms import KeijibanForm,ProfileForm,CreateForm,CommentForm,SendMessageForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Keijiban,Profile,Comment
+from .models import Keijiban,Profile,Comment,Message
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator
+# from accounts.models import CustomUser
 
 
 
@@ -11,6 +12,7 @@ from django.core.paginator import Paginator
 def listfunc(request,now_page=1):
     object_list=Keijiban.objects.all().order_by("created_at").reverse()
     comment_list=Comment.objects.all().order_by("created_at").reverse()
+
 
     # author_list=Keijiban.objects.all().values("authorid_id").reverse()
     author_list=Keijiban.objects.all().order_by("created_at").reverse().values("authorid_id")
@@ -77,7 +79,7 @@ def profileupdatefunc(request):
 
     else:
         profile_update=ProfileForm(instance=obj)
-        return render(request,"profileupdate.html",{"profile_update":profile_update})
+        return render(request,"profileupdate.html",{"profile_update":profile_update,"obj":obj})
 
 
 def keijibanupdatefunc(request,pk):
@@ -89,7 +91,7 @@ def keijibanupdatefunc(request,pk):
 
     else:
         keijiban_update=CreateForm(instance=obj)
-        return render(request,"keijibanupdate.html",{"keijiban_update":keijiban_update})
+        return render(request,"keijibanupdate.html",{"keijiban_update":keijiban_update,"obj":obj})
 
 
 def keijibandeletefunc(request,pk):
@@ -100,7 +102,7 @@ def keijibandeletefunc(request,pk):
 
     else:
         keijiban_delete=KeijibanForm(instance=obj)
-        return render(request,"keijibandelete.html",{"keijiban_delete":keijiban_delete})
+        return render(request,"keijibandelete.html",{"keijiban_delete":keijiban_delete,"obj":obj})
 
 def goodfunc(request,pk):
     keijiban=Keijiban.objects.get(id=pk)
@@ -118,6 +120,57 @@ def commentcreatefunc(request,pk):
     else:
         comment=CommentForm()
         return render(request,'commentcreate.html',{"comment":comment})
+
+def sendmessagefunc(request,pk):
+    profile=Profile.objects.get(profileid_id=pk)
+    if request.method == "POST":
+        sendmessage = Message.objects.create(message=request.POST["message"],image=request.FILES.get("image"),sendmessageid_id=request.user.id,recievemessageid_id=profile.id)
+        # print(recievemessageid_id)
+        sendmessage.save()
+        return redirect("list")
+
+    else :
+        sendmessage=SendMessageForm()
+        return render(request,"sendmessage.html",{"sendmessage":sendmessage})
+
+def messagelistfunc(request,pk):
+    send_message_list = Message.objects.filter(sendmessageid_id=pk).order_by("created_at").reverse()
+    recieve_message_list = Message.objects.filter(recievemessageid_id=pk-1).order_by("created_at").reverse()
+    profile_list=[]
+    sender_list=[]
+    new_recieve_message_list=[]
+    for i in recieve_message_list.values("sendmessageid_id"):
+        profile_list.append(i["sendmessageid_id"])
+
+    for s in profile_list:
+        profile=Profile.objects.get(profileid_id=s)
+        sender_list.append(profile.username)
+
+    for t in range(len(recieve_message_list)):
+        sender=model_to_dict(recieve_message_list[t])
+        sender["username"]=sender_list[t]
+        new_recieve_message_list.append(sender)
+
+    if len(send_message_list) == 0 :
+        if len(new_recieve_message_list) == 0 :
+            return render(request,"messagelist.html",{"send_list":"送信メッセージはありません","recieve_list":"受信メッセージはありません"})
+        else:
+            return render(request,"messagelist.html",{"send_list":"送信メッセージはありません","new_recieve_message_list":new_recieve_message_list})
+    else:
+        if len(new_recieve_message_list) == 0 :
+            return render(request,"messagelist.html",{"send_message_list":send_message_list,"recieve_list":"受信メッセージはありません"})
+        else:
+            return render(request,"messagelist.html",{"send_message_list":send_message_list,"new_recieve_message_list":new_recieve_message_list})
+
+
+
+
+
+
+
+
+
+
 
 
 
