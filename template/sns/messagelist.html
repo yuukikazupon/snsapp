@@ -1,34 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
+<div class="row mx-lg-n5">
+
+<div class="col py-3 px-lg-5 border bg-light">
   <h1>送信メッセージ一覧</h1>
 {{ send_list }}
-{% for message in send_message_list %}
+{% for message in new_send_message_list %}
   <p>{{ message.message }}</p>
   {% if message.image.url != null %}
-    <p><img src = "{{ message.image.url }}" width=300px ></p>
+    <p><img src = "{{ message.image.url }}" class="img-fluid" alt="Responsive image" ></p>
   {% endif %}
   <p>{{ message.created_at }}</p>
-  <p>{{ message.recievemessageid.username }}へ送信</p>
-
+  <p>{{ message.username }}さんへ送信済</p>
+  <a href = "{% url 'sendmessage' message.recieverid %}">{{ message.username }}さんへさらに送信する</a>
 {% endfor %}
 </div>
 
-<div>
+<div class="col py-3 px-lg-5 border bg-light">
   <h1>受信メッセージ一覧</h1>
 {{ recieve_list }}
 {% for message in new_recieve_message_list %}
   <p>{{ message.message }}</p>
   {% if message.image.url != null %}
-    <p><img src = "{{ message.image.url }}" width=300px ></p>
+    <p><img src = "{{ message.image.url }}" class="img-fluid" alt="Responsive image" ></p>
   {% endif %}
   <p>{{ message.created_at }}</p>
-  <p>{{ message.username}}より受信</p>
+  <p>{{ message.username}}さんより受信</p>
+  <a href = "{% url 'sendmessage' message.sendmessageid %}">{{ message.username}}さんへ返信する</a>
+
 
 {% endfor %}
+</div>
 
 </div>
-<p><a href = "{% url 'list' %}">投稿一覧画面へ</a></p>
+<!-- <p><a href = "{% url 'list' %}">投稿一覧画面へ</a></p> -->
 
 {% endblock content %}

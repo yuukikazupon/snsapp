@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-
+<div class="container">
+ <div class="text-center">
 <form action = "" method ="POST" enctype="multipart/form-data">{% csrf_token %}
 
   {{ createform.as_p }}
 <input type = "submit" value = "投稿">
 </form>
-
+ </div>
+</div>
 
 {% endblock %}

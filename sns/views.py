@@ -26,6 +26,7 @@ def listfunc(request,now_page=1):
     for i in range(len(object_list)):
         new_object=model_to_dict(object_list[i])
         new_object["username"]=profile_list[i].username
+        new_object["icon"]=profile_list[i].icon
         new_object_list.append(new_object)
 
     page=Paginator(new_object_list,30)
@@ -110,6 +111,12 @@ def goodfunc(request,pk):
     keijiban.save()
     return redirect("list")
 
+
+
+
+
+
+
 def commentcreatefunc(request,pk):
     profile=Profile.objects.get(profileid_id=request.user.id)
     if request.method == "POST":
@@ -137,30 +144,48 @@ def messagelistfunc(request,pk):
     send_message_list = Message.objects.filter(sendmessageid_id=pk).order_by("created_at").reverse()
     recieve_message_list = Message.objects.filter(recievemessageid_id=pk-1).order_by("created_at").reverse()
     profile_list=[]
+    profile_list1=[]
+    profile_list2=[]
     sender_list=[]
+    reciever_list=[]
     new_recieve_message_list=[]
-    for i in recieve_message_list.values("sendmessageid_id"):
+    new_send_message_list=[]
+    for i in recieve_message_list.values("sendmessageid_id"):   
         profile_list.append(i["sendmessageid_id"])
+
+    for v in send_message_list.values("recievemessageid_id"):
+        profile_list1.append(v["recievemessageid_id"]+1)
+        profile_list2.append(v["recievemessageid_id"])
 
     for s in profile_list:
         profile=Profile.objects.get(profileid_id=s)
         sender_list.append(profile.username)
+
+    for w in profile_list2:
+        profile2=Profile.objects.get(id=w)
+        reciever_list.append(profile2.username)
 
     for t in range(len(recieve_message_list)):
         sender=model_to_dict(recieve_message_list[t])
         sender["username"]=sender_list[t]
         new_recieve_message_list.append(sender)
 
-    if len(send_message_list) == 0 :
+    for u in range(len(send_message_list)):
+        reciever=model_to_dict(send_message_list[u])
+        reciever["recieverid"]=profile_list1[u]
+        reciever["username"]=reciever_list[u]
+        new_send_message_list.append(reciever)
+
+    if len(new_send_message_list) == 0 :
         if len(new_recieve_message_list) == 0 :
             return render(request,"messagelist.html",{"send_list":"送信メッセージはありません","recieve_list":"受信メッセージはありません"})
         else:
             return render(request,"messagelist.html",{"send_list":"送信メッセージはありません","new_recieve_message_list":new_recieve_message_list})
     else:
         if len(new_recieve_message_list) == 0 :
-            return render(request,"messagelist.html",{"send_message_list":send_message_list,"recieve_list":"受信メッセージはありません"})
+            return render(request,"messagelist.html",{"new_send_message_list":new_send_message_list,"recieve_list":"受信メッセージはありません"})
         else:
-            return render(request,"messagelist.html",{"send_message_list":send_message_list,"new_recieve_message_list":new_recieve_message_list})
+            return render(request,"messagelist.html",{"new_send_message_list":new_send_message_list,"new_recieve_message_list":new_recieve_message_list})
 
 
 

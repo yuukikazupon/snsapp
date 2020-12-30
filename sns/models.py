@@ -34,7 +34,7 @@ class Profile(models.Model):
 class Keijiban(models.Model) :
     authorid = models.ForeignKey('accounts.CustomUser',on_delete=models.CASCADE)
     toukou = models.TextField('投稿内容')
-    image = models.ImageField(upload_to="media/media/",null=True,blank=True)
+    image = models.ImageField('画像',upload_to="media/media/",null=True,blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     good = models.IntegerField(null=True,blank=True,default=0)
 
