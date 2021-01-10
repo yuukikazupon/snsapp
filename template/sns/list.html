@@ -1,16 +1,24 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
+
+
+<link rel="stylesheet" href="{% static 'list.css' %}">
 <div class="container">
   <div class="list-group">
 
 {% for object in object_list %}
-    <div class="list-group-item">
+  <div class="list-group-item">
+
   <p>投稿者:<a href = "{% url 'profiledetail' object.authorid %}">{{ object.username }}さん </a>
+  {% if object.icon.url != null %}
   <img src = "{{ object.icon.url }}" width=100px></p>
+  {% endif %}
+  <div class="toukou">
   <p>{{ object.created_at }}</p>
   <p>投稿：{{ object.toukou }}</p>
-    </div>
+  </div>
+  </div>
     <div class="list-group-item">
   {% if object.image.url != null %}
     <p class="text-center"><img src = "{{ object.image.url }}" class="img-fluid" alt="Responsive image"></p>
@@ -27,16 +35,20 @@
 
 
   {% if request.user.id != object.authorid %}
-    <a class="btn btn-primary" href = "{% url 'good' object.id %}" role="button">いいね{{ object.good }}</a>
+    <a class="btn btn-primary" href="{% url 'good' object.id %}"　role="button" >いいね{{ object.good }}</a>
   {% else %}
-    <p><a class="btn btn-primary">いいね{{ object.good }}</a></p>
+    <p><a class="btn btn-primary" id="btn">いいね{{ object.good }}</a></p>
   {% endif %}
     </div>
+
+
 
     <div class="list-group-item">
     {% for comment in comment_list %}
       {% if comment.commentid_id  == object.id %}
-          <p>コメント：{{ comment.commentfield }}　{{ comment.commentprofileid.username }}さん　{{ comment.created_at }}</p>
+      <div class="comment">
+          <p>{{ comment.commentfield }}　{{ comment.commentprofileid.username }}さん　{{ comment.created_at }}</p>
+      </div>
       {% endif %}
     {% endfor %}
     <a href = "{% url 'commentcreate' object.id %}">コメントする</a>

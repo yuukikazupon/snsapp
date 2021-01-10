@@ -74,10 +74,22 @@ WSGI_APPLICATION = 'snsapp.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'keijiban',
+        'USER':'',
+        'PASSWORD':'',
+        'HOST':'',
+        'PORT':''
     }
+
+
+
+
 }
 
 
@@ -107,12 +119,12 @@ DEFAULT_FROM_EMAIL = 'yuukikun539.bm@gmail.com'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'yuukikun539@gmail.com'
-EMAIL_HOST_PASSWORD = 'google_account_application_passwd'
+EMAIL_HOST_PASSWORD = '8136abcd'
 EMAIL_USE_TLS = True
 
 
 
-SITE_ID = 1
+SITE_ID = 4
 
 AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',

@@ -5,6 +5,9 @@ from .models import Keijiban,Profile,Comment,Message
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator
 # from accounts.models import CustomUser
+#追加
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 
 
@@ -115,8 +118,6 @@ def goodfunc(request,pk):
 
 
 
-
-
 def commentcreatefunc(request,pk):
     profile=Profile.objects.get(profileid_id=request.user.id)
     if request.method == "POST":
@@ -150,7 +151,7 @@ def messagelistfunc(request,pk):
     reciever_list=[]
     new_recieve_message_list=[]
     new_send_message_list=[]
-    for i in recieve_message_list.values("sendmessageid_id"):   
+    for i in recieve_message_list.values("sendmessageid_id"):
         profile_list.append(i["sendmessageid_id"])
 
     for v in send_message_list.values("recievemessageid_id"):
