@@ -23,7 +23,9 @@
       <a class="nav-item nav-link active" href="{% url 'list' %}">投稿一覧画面へ<span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link active" href="{% url 'create' %}">新規投稿画面へ</a>
       <a class="nav-item nav-link active" href="{% url 'profileupdate' %}">プロフィール編集画面へ</a>
+      {% if request.user.id %}
       <a class="nav-item nav-link active" href="{% url 'messagelist' request.user.id %}">メッセージ一覧画面へ</a>
+      {% endif %}
       <a class="nav-item nav-link active" href="{% url 'account_logout' %}">ログアウト</a>
 
     </div>

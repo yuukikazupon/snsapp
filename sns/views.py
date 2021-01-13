@@ -16,7 +16,6 @@ from django.http import JsonResponse
 def listfunc(request,now_page=1):
     object_list=Keijiban.objects.all().order_by("created_at").reverse()
     comment_list=Comment.objects.all().order_by("created_at").reverse()
-    print(request.user)
 
     # author_list=Keijiban.objects.all().values("authorid_id").reverse()
     author_list=Keijiban.objects.all().order_by("created_at").reverse().values("authorid_id")
@@ -67,6 +66,7 @@ def profiledetailfunc(request,pk):
     profile_detail=Profile.objects.get(profileid_id=pk)
     return render(request,"detail.html",{"profile_detail":profile_detail})
 
+@login_required
 def profileupdatefunc(request):
     obj=Profile.objects.get(profileid_id=request.user.id)
     if request.method == "POST":
@@ -78,7 +78,7 @@ def profileupdatefunc(request):
         profile_update=ProfileForm(instance=obj)
         return render(request,"profileupdate.html",{"profile_update":profile_update,"obj":obj})
 
-
+@login_required
 def keijibanupdatefunc(request,pk):
     obj=Keijiban.objects.get(id=pk)
     if request.method == "POST":
@@ -90,7 +90,7 @@ def keijibanupdatefunc(request,pk):
         keijiban_update=CreateForm(instance=obj)
         return render(request,"keijibanupdate.html",{"keijiban_update":keijiban_update,"obj":obj})
 
-
+@login_required
 def keijibandeletefunc(request,pk):
     obj=Keijiban.objects.get(id=pk)
     if request.method == "POST":
@@ -101,6 +101,7 @@ def keijibandeletefunc(request,pk):
         keijiban_delete=KeijibanForm(instance=obj)
         return render(request,"keijibandelete.html",{"keijiban_delete":keijiban_delete,"obj":obj})
 
+@login_required
 def goodfunc(request,pk):
     keijiban=Keijiban.objects.get(id=pk)
     keijiban.good+=1
@@ -110,7 +111,7 @@ def goodfunc(request,pk):
 
 
 
-
+@login_required
 def commentcreatefunc(request,pk):
     profile=Profile.objects.get(profileid_id=request.user.id)
     if request.method == "POST":
@@ -122,11 +123,11 @@ def commentcreatefunc(request,pk):
         comment=CommentForm()
         return render(request,'commentcreate.html',{"comment":comment})
 
+@login_required
 def sendmessagefunc(request,pk):
-    profile=Profile.objects.get(id=pk)
+    profile=Profile.objects.get(profileid_id=pk)
     if request.method == "POST":
         sendmessage = Message.objects.create(message=request.POST["message"],image=request.FILES.get("image"),sendmessageid_id=request.user.id,recievemessageid_id=profile.id)
-        # print(recievemessageid_id)
         sendmessage.save()
         return redirect("list")
 
@@ -134,10 +135,15 @@ def sendmessagefunc(request,pk):
         sendmessage=SendMessageForm()
         return render(request,"sendmessage.html",{"sendmessage":sendmessage})
 
+@login_required
 def messagelistfunc(request,pk):
     send_message_list = Message.objects.filter(sendmessageid_id=pk).order_by("created_at").reverse()
     profile=Profile.objects.get(profileid_id=pk)
     recieve_message_list = Message.objects.filter(recievemessageid_id=profile.id).order_by("created_at").reverse()
+
+    # profileid=Profile.objects.get(id=profile.id)
+    # profileid_id=profileid.profileid_id
+    # print(profileid_id)
     profile_list=[]
     profile_list1=[]
     profile_list2=[]
@@ -151,6 +157,7 @@ def messagelistfunc(request,pk):
     for v in send_message_list.values("recievemessageid_id"):
         profile_list1.append(v["recievemessageid_id"])
         profile_list2.append(v["recievemessageid_id"])
+        print(profile_list1)
 
     for s in profile_list:
         profile=Profile.objects.get(profileid_id=s)
@@ -167,9 +174,11 @@ def messagelistfunc(request,pk):
 
     for u in range(len(send_message_list)):
         reciever=model_to_dict(send_message_list[u])
-        reciever["recieverid"]=profile_list1[u]
+        profileid=Profile.objects.get(id=profile_list1[u])
+        print(profileid.profileid_id)
+        reciever["recieverid"]=profileid.profileid_id
         reciever["username"]=reciever_list[u]
-        print(reciever)
+        # print(reciever)
         new_send_message_list.append(reciever)
 
     if len(new_send_message_list) == 0 :
