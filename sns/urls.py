@@ -4,6 +4,7 @@ from .views import listfunc,createfunc,profilefunc,profiledetailfunc,profileupda
 from django.conf.urls import url
 
 
+
 urlpatterns = [
     path("list/<int:now_page>/",listfunc,name="list"),
     path("list/",listfunc,name="list"),

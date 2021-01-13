@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Keijiban,Profile,Comment,Message
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 # from accounts.models import CustomUser
 #追加
 from django.template.loader import render_to_string
@@ -15,7 +16,7 @@ from django.http import JsonResponse
 def listfunc(request,now_page=1):
     object_list=Keijiban.objects.all().order_by("created_at").reverse()
     comment_list=Comment.objects.all().order_by("created_at").reverse()
-
+    print(request.user)
 
     # author_list=Keijiban.objects.all().values("authorid_id").reverse()
     author_list=Keijiban.objects.all().order_by("created_at").reverse().values("authorid_id")
@@ -34,17 +35,9 @@ def listfunc(request,now_page=1):
 
     page=Paginator(new_object_list,30)
 
-    # user_list=[]
-    # if request.user.is_authenticated :
-    #     print(request.user.get_username)
-    #     user1=request.user.get_username
-    #     user_list.append(user1)
-    # user_list1=len(user_list)
-    # print(user_list1)
-
     return render(request,"list.html",{"object_list":page.get_page(now_page),"comment_list":comment_list})
 
-
+@login_required
 def createfunc(request):
     if request.method == "POST":
         form = Keijiban.objects.create(toukou=request.POST["toukou"],image=request.FILES.get("image"),authorid_id=request.user.id)
@@ -130,7 +123,7 @@ def commentcreatefunc(request,pk):
         return render(request,'commentcreate.html',{"comment":comment})
 
 def sendmessagefunc(request,pk):
-    profile=Profile.objects.get(profileid_id=pk)
+    profile=Profile.objects.get(id=pk)
     if request.method == "POST":
         sendmessage = Message.objects.create(message=request.POST["message"],image=request.FILES.get("image"),sendmessageid_id=request.user.id,recievemessageid_id=profile.id)
         # print(recievemessageid_id)
@@ -143,7 +136,8 @@ def sendmessagefunc(request,pk):
 
 def messagelistfunc(request,pk):
     send_message_list = Message.objects.filter(sendmessageid_id=pk).order_by("created_at").reverse()
-    recieve_message_list = Message.objects.filter(recievemessageid_id=pk-1).order_by("created_at").reverse()
+    profile=Profile.objects.get(profileid_id=pk)
+    recieve_message_list = Message.objects.filter(recievemessageid_id=profile.id).order_by("created_at").reverse()
     profile_list=[]
     profile_list1=[]
     profile_list2=[]
@@ -155,7 +149,7 @@ def messagelistfunc(request,pk):
         profile_list.append(i["sendmessageid_id"])
 
     for v in send_message_list.values("recievemessageid_id"):
-        profile_list1.append(v["recievemessageid_id"]+1)
+        profile_list1.append(v["recievemessageid_id"])
         profile_list2.append(v["recievemessageid_id"])
 
     for s in profile_list:
@@ -175,6 +169,7 @@ def messagelistfunc(request,pk):
         reciever=model_to_dict(send_message_list[u])
         reciever["recieverid"]=profile_list1[u]
         reciever["username"]=reciever_list[u]
+        print(reciever)
         new_send_message_list.append(reciever)
 
     if len(new_send_message_list) == 0 :
