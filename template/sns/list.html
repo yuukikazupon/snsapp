@@ -10,10 +10,13 @@
 {% for object in object_list %}
   <div class="list-group-item">
 
-  <p>投稿者:<a href = "{% url 'profiledetail' object.authorid %}">{{ object.username }}さん </a>
+  <p>
   {% if object.icon.url != null %}
-  <img src = "{{ object.icon.url }}" width=100px></p>
+  <img src = "{{ object.icon.url }}" width=100px>
   {% endif %}
+  <a href = "{% url 'profiledetail' object.authorid %}">{{ object.username }}さん </a>
+  </p>
+
   <div class="toukou">
   <p>{{ object.created_at }}</p>
   <p>投稿：{{ object.toukou }}</p>

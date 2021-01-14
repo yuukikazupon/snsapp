@@ -17,7 +17,6 @@ def listfunc(request,now_page=1):
     object_list=Keijiban.objects.all().order_by("created_at").reverse()
     comment_list=Comment.objects.all().order_by("created_at").reverse()
 
-    # author_list=Keijiban.objects.all().values("authorid_id").reverse()
     author_list=Keijiban.objects.all().order_by("created_at").reverse().values("authorid_id")
     profile_list=[]
     for author in author_list :
@@ -38,13 +37,17 @@ def listfunc(request,now_page=1):
 
 @login_required
 def createfunc(request):
-    if request.method == "POST":
-        form = Keijiban.objects.create(toukou=request.POST["toukou"],image=request.FILES.get("image"),authorid_id=request.user.id)
-        return redirect("list")
+    try:
+        Profile.objects.get(profileid_id=request.user.id)
+        if request.method == "POST":
+            form = Keijiban.objects.create(toukou=request.POST["toukou"],image=request.FILES.get("image"),authorid_id=request.user.id)
+            return redirect("list")
 
-    else:
-        createform = CreateForm()
-        return render(request,"create.html",{"createform":createform})
+        else:
+            createform = CreateForm()
+            return render(request,"create.html",{"createform":createform})
+    except:
+        return redirect("profile")
 
 def profilefunc(request):
     if request.method == "POST":
@@ -68,210 +71,150 @@ def profiledetailfunc(request,pk):
 
 @login_required
 def profileupdatefunc(request):
-    obj=Profile.objects.get(profileid_id=request.user.id)
-    if request.method == "POST":
-        profile_update=ProfileForm(request.POST,request.FILES,instance=obj)
-        profile_update.save()
-        return redirect("list")
+    try:
+        Profile.objects.get(profileid_id=request.user.id)
+        obj=Profile.objects.get(profileid_id=request.user.id)
+        if request.method == "POST":
+            profile_update=ProfileForm(request.POST,request.FILES,instance=obj)
+            profile_update.save()
+            return redirect("list")
 
-    else:
-        profile_update=ProfileForm(instance=obj)
-        return render(request,"profileupdate.html",{"profile_update":profile_update,"obj":obj})
+        else:
+            profile_update=ProfileForm(instance=obj)
+            return render(request,"profileupdate.html",{"profile_update":profile_update,"obj":obj})
+    except:
+        return redirect("profile")
 
 @login_required
 def keijibanupdatefunc(request,pk):
-    obj=Keijiban.objects.get(id=pk)
-    if request.method == "POST":
-        keijiban_update=CreateForm(request.POST,request.FILES,instance=obj)
-        keijiban_update.save()
-        return redirect("list")
+    try:
+        Profile.objects.get(profileid_id=request.user.id)
+        obj=Keijiban.objects.get(id=pk)
+        if request.method == "POST":
+            keijiban_update=CreateForm(request.POST,request.FILES,instance=obj)
+            keijiban_update.save()
+            return redirect("list")
 
-    else:
-        keijiban_update=CreateForm(instance=obj)
-        return render(request,"keijibanupdate.html",{"keijiban_update":keijiban_update,"obj":obj})
+        else:
+            keijiban_update=CreateForm(instance=obj)
+            return render(request,"keijibanupdate.html",{"keijiban_update":keijiban_update,"obj":obj})
+    except:
+        return redirect("profile")
 
 @login_required
 def keijibandeletefunc(request,pk):
-    obj=Keijiban.objects.get(id=pk)
-    if request.method == "POST":
-        obj.delete()
-        return redirect("list")
+    try:
+        Profile.objects.get(profileid_id=request.user.id)
+        obj=Keijiban.objects.get(id=pk)
+        if request.method == "POST":
+            obj.delete()
+            return redirect("list")
 
-    else:
-        keijiban_delete=KeijibanForm(instance=obj)
-        return render(request,"keijibandelete.html",{"keijiban_delete":keijiban_delete,"obj":obj})
+        else:
+            keijiban_delete=KeijibanForm(instance=obj)
+            return render(request,"keijibandelete.html",{"keijiban_delete":keijiban_delete,"obj":obj})
+    except:
+        return redirect("profile")
 
 @login_required
 def goodfunc(request,pk):
-    keijiban=Keijiban.objects.get(id=pk)
-    keijiban.good+=1
-    keijiban.save()
-    return redirect("list")
+    try:
+        Profile.objects.get(profileid_id=request.user.id)
+        keijiban=Keijiban.objects.get(id=pk)
+        keijiban.good+=1
+        keijiban.save()
+        return redirect("list")
+    except:
+        return redirect("profile")
 
 
 
 
 @login_required
 def commentcreatefunc(request,pk):
-    profile=Profile.objects.get(profileid_id=request.user.id)
-    if request.method == "POST":
-        comment=Comment.objects.create(commentfield=request.POST["commentfield"],commentid_id=pk,commentprofileid_id=profile.id)
-        comment.save()
-        return redirect("list")
+    try:
+        profile=Profile.objects.get(profileid_id=request.user.id)
+        if request.method == "POST":
+            comment=Comment.objects.create(commentfield=request.POST["commentfield"],commentid_id=pk,commentprofileid_id=profile.id)
+            comment.save()
+            return redirect("list")
 
-    else:
-        comment=CommentForm()
-        return render(request,'commentcreate.html',{"comment":comment})
+        else:
+            comment=CommentForm()
+            return render(request,'commentcreate.html',{"comment":comment})
+    except:
+        return redirect("profile")
 
 @login_required
 def sendmessagefunc(request,pk):
-    profile=Profile.objects.get(profileid_id=pk)
-    if request.method == "POST":
-        sendmessage = Message.objects.create(message=request.POST["message"],image=request.FILES.get("image"),sendmessageid_id=request.user.id,recievemessageid_id=profile.id)
-        sendmessage.save()
-        return redirect("list")
+    try:
+        profile=Profile.objects.get(profileid_id=request.user.id)
 
-    else :
-        sendmessage=SendMessageForm()
-        return render(request,"sendmessage.html",{"sendmessage":sendmessage})
+        profile=Profile.objects.get(profileid_id=pk)
+        if request.method == "POST":
+            sendmessage = Message.objects.create(message=request.POST["message"],image=request.FILES.get("image"),sendmessageid_id=request.user.id,recievemessageid_id=profile.id)
+            sendmessage.save()
+            return redirect("list")
+
+        else :
+            sendmessage=SendMessageForm()
+            return render(request,"sendmessage.html",{"sendmessage":sendmessage})
+    except:
+        return redirect("profile")
 
 @login_required
 def messagelistfunc(request,pk):
-    send_message_list = Message.objects.filter(sendmessageid_id=pk).order_by("created_at").reverse()
-    profile=Profile.objects.get(profileid_id=pk)
-    recieve_message_list = Message.objects.filter(recievemessageid_id=profile.id).order_by("created_at").reverse()
+    try:
+        profile=Profile.objects.get(profileid_id=request.user.id)
 
-    # profileid=Profile.objects.get(id=profile.id)
-    # profileid_id=profileid.profileid_id
-    # print(profileid_id)
-    profile_list=[]
-    profile_list1=[]
-    profile_list2=[]
-    sender_list=[]
-    reciever_list=[]
-    new_recieve_message_list=[]
-    new_send_message_list=[]
-    for i in recieve_message_list.values("sendmessageid_id"):
-        profile_list.append(i["sendmessageid_id"])
+        send_message_list = Message.objects.filter(sendmessageid_id=pk).order_by("created_at").reverse()  #ログインしている人が送ったメッセージ一覧
+        profile=Profile.objects.get(profileid_id=pk)
+        recieve_message_list = Message.objects.filter(recievemessageid_id=profile.id).order_by("created_at").reverse() #ログインしている人が受け取ったメッセージ一覧
 
-    for v in send_message_list.values("recievemessageid_id"):
-        profile_list1.append(v["recievemessageid_id"])
-        profile_list2.append(v["recievemessageid_id"])
-        print(profile_list1)
+        profile_list=[]
+        profile_list1=[]
+        profile_list2=[]
+        sender_list=[]
+        reciever_list=[]
+        new_recieve_message_list=[]
+        new_send_message_list=[]
+        for i in recieve_message_list.values("sendmessageid_id"):  #ログインしている人が受け取ったメッセージ一覧から送信者を出す
+            profile_list.append(i["sendmessageid_id"])             #送信者のsendmessageid_idをリストにする
 
-    for s in profile_list:
-        profile=Profile.objects.get(profileid_id=s)
-        sender_list.append(profile.username)
+        for v in send_message_list.values("recievemessageid_id"): #ログインしている人が送ったメッセージ一覧から受信する人を抽出
+            profile_list2.append(v["recievemessageid_id"])        #受信する人のidをリストにする
 
-    for w in profile_list2:
-        profile2=Profile.objects.get(id=w)
-        reciever_list.append(profile2.username)
+        for s in profile_list:
+            profile=Profile.objects.get(profileid_id=s)           #送信者のprofile情報を取得
+            sender_list.append(profile.username)                  #送信者の名前をリストにする
 
-    for t in range(len(recieve_message_list)):
-        sender=model_to_dict(recieve_message_list[t])
-        sender["username"]=sender_list[t]
-        new_recieve_message_list.append(sender)
+        for w in profile_list2:
+            profile2=Profile.objects.get(id=w)                    #受信者のprofile情報を取得
+            reciever_list.append(profile2.username)               #受信者の名前をリストにする
 
-    for u in range(len(send_message_list)):
-        reciever=model_to_dict(send_message_list[u])
-        profileid=Profile.objects.get(id=profile_list1[u])
-        print(profileid.profileid_id)
-        reciever["recieverid"]=profileid.profileid_id
-        reciever["username"]=reciever_list[u]
-        # print(reciever)
-        new_send_message_list.append(reciever)
+        for t in range(len(recieve_message_list)):
+            sender=model_to_dict(recieve_message_list[t])         #ログインしている人が受信するメッセージリスト(QuerySet)を辞書にする
+            sender["username"]=sender_list[t]                     #送信者名を辞書に追加
+            new_recieve_message_list.append(sender)               #ログインしている人が受信するメッセージ一覧に送信者を追加
 
-    if len(new_send_message_list) == 0 :
-        if len(new_recieve_message_list) == 0 :
-            return render(request,"messagelist.html",{"send_list":"送信メッセージはありません","recieve_list":"受信メッセージはありません"})
+        for u in range(len(send_message_list)):
+            reciever=model_to_dict(send_message_list[u])          #ログインしている人が送信したメッセージリスト(QuerySet)を辞書にする
+            profileid=Profile.objects.get(id=profile_list2[u])    #受信する人のidがprofileのidと一致するprofile情報を取得
+            print(profileid.profileid_id)
+            reciever["recieverid"]=profileid.profileid_id         #取得したprofile情報からprofileid_id(ユーザーモデルのid)を取得して受信者として辞書に追加
+            reciever["username"]=reciever_list[u]                 #受信者の名前を辞書に追加
+            new_send_message_list.append(reciever)                #ログインしている人が送ったメッセージ一覧に受信者を追加
+
+        if len(new_send_message_list) == 0 :
+            if len(new_recieve_message_list) == 0 :
+                return render(request,"messagelist.html",{"send_list":"送信メッセージはありません","recieve_list":"受信メッセージはありません"})
+            else:
+                return render(request,"messagelist.html",{"send_list":"送信メッセージはありません","new_recieve_message_list":new_recieve_message_list})
         else:
-            return render(request,"messagelist.html",{"send_list":"送信メッセージはありません","new_recieve_message_list":new_recieve_message_list})
-    else:
-        if len(new_recieve_message_list) == 0 :
-            return render(request,"messagelist.html",{"new_send_message_list":new_send_message_list,"recieve_list":"受信メッセージはありません"})
-        else:
-            return render(request,"messagelist.html",{"new_send_message_list":new_send_message_list,"new_recieve_message_list":new_recieve_message_list})
+            if len(new_recieve_message_list) == 0 :
+                return render(request,"messagelist.html",{"new_send_message_list":new_send_message_list,"recieve_list":"受信メッセージはありません"})
+            else:
+                return render(request,"messagelist.html",{"new_send_message_list":new_send_message_list,"new_recieve_message_list":new_recieve_message_list})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def profileupdatefunc(request,pk):
-#     profile_update=Profile.objects.get(profileid=pk)
-#     if request.method == "POST":
-#         profile_update.username=request.POST["username"]
-#         profile_update.age=request.POST["age"]
-#         profile_update.sex=request.POST["sex"]
-#         profile_update.icon=request.POST["icon"]
-#         profile_update.save()
-#         return redirect("list")
-#
-#
-#     else:
-#         return render(request,"profileupdate.html",{"profile_update":profile_update})
-
-
-
-
-# def profilefunc(request) :
-#
-#     if request.method == "POST":
-#         profileform = ProfileForm(request.POST,request.FILES)
-#         if profileform.is_valid():
-#         try :
-#         profileform = ProfileForm()
-#             print(request.POST["age"])
-#             profileform.age = request.POST["age"]
-#             profileform.sex = request.POST["sex"]
-#             profileform.address = request.POST["address"]
-#             profileform.icon = request.FILES["icon"]
-#             print(profileform.icon)
-#             print(profileform.age)
-#             profileform.save()
-#         return redirect("list")
-#         except Exception as e:
-#             print(e)
-#             # profileform.save()
-#             return redirect("profile")
-#
-#
-#     else :
-#         profileform = ProfileForm(request.GET)
-#         return render(request,"profile.html",{"profileform":profileform})
-
-
-
-
-
-
-# def loginfunc(request):
-#     if request.method == "POST":
-#         email = request.POST['email']
-#         password = request.POST['password']
-#         user = authenticate(request,username=username,password=password)
-#         if user is not None:
-#             login(request,user)
-#         else:
-#             return redirect('login')
-#     else :
-#         loginform = LoginForm()
-#         return render(request,'login.html',{'loginform':loginform})
-#     return redirect('list')
-#
-# def logoutfunc(request):
-#     logout(request)
-#     return redirect("login")
+    except:
+        return redirect("profile")

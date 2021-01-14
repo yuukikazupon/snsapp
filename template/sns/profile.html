@@ -1,14 +1,33 @@
-{% extends "base.html" %}
+<!doctype html>
+<html lang="en">
 {% load static %}
-{% block content %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>掲示板</title>
+    {% block custumcss %}
+    {% endblock custumcss %}
+
+  </head>
+  <body>
+    <header>
+      <nav class="navbar-expand-lg" style="background-color:#ffeaff;">
+  <a class="navbar-brand">掲示板</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    </header>
 <link rel="stylesheet" href="{% static 'profile.css' %}">
 <div class="container">
  <div class="text-center">
+   <h1>プロフィールを登録してください</h1>
 <form action ="" method ="POST" enctype="multipart/form-data">{% csrf_token %}
 {{ profileform.as_p }}
 <input type="submit" value = "保存">
 </form>
   </div>
 </div>
-
-{% endblock %}
+ </body>
