@@ -120,13 +120,20 @@ def keijibandeletefunc(request,pk):
 def goodfunc(request,pk):
     try:
         Profile.objects.get(profileid_id=request.user.id)
+
         keijiban=Keijiban.objects.get(id=pk)
-        keijiban.good+=1
-        keijiban.save()
-        return redirect("list")
+        goodman = Profile.objects.get(profileid_id=request.user.id).username
+        if goodman in keijiban.goodtext :
+            print(keijiban.goodtext)
+            return redirect("list")
+
+        else:
+            keijiban.goodtext = keijiban.goodtext + " " + goodman + "さん"
+            keijiban.good+=1
+            keijiban.save()
+            return redirect("list")
     except:
         return redirect("profile")
-
 
 
 
@@ -200,7 +207,6 @@ def messagelistfunc(request,pk):
         for u in range(len(send_message_list)):
             reciever=model_to_dict(send_message_list[u])          #ログインしている人が送信したメッセージリスト(QuerySet)を辞書にする
             profileid=Profile.objects.get(id=profile_list2[u])    #受信する人のidがprofileのidと一致するprofile情報を取得
-            print(profileid.profileid_id)
             reciever["recieverid"]=profileid.profileid_id         #取得したprofile情報からprofileid_id(ユーザーモデルのid)を取得して受信者として辞書に追加
             reciever["username"]=reciever_list[u]                 #受信者の名前を辞書に追加
             new_send_message_list.append(reciever)                #ログインしている人が送ったメッセージ一覧に受信者を追加

@@ -4,7 +4,10 @@
 
 
 <link rel="stylesheet" href="{% static 'list.css' %}">
+<h1 style="text-align:center">投稿一覧</h1>
+
 <div class="container">
+
   <div class="list-group">
 
 {% for object in object_list %}
@@ -39,6 +42,7 @@
 
   {% if request.user.id != object.authorid %}
     <a class="btn btn-primary" href="{% url 'good' object.id %}"　role="button" >いいね{{ object.good }}</a>
+    {{ object.goodtext }}
   {% else %}
     <p><a class="btn btn-primary" id="btn">いいね{{ object.good }}</a></p>
   {% endif %}

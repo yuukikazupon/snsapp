@@ -37,6 +37,7 @@ class Keijiban(models.Model) :
     image = models.ImageField('画像',upload_to="media/media/",null=True,blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     good = models.IntegerField(null=True,blank=True,default=0)
+    goodtext = models.CharField(max_length=10000,null=True,blank=True,default="👍")
 
 
 class Comment(models.Model):
