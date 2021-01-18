@@ -16,7 +16,10 @@
       <p><img src = "{{ message.image.url }}" class="img-fluid" alt="Responsive image" ></p>
     {% endif %}
     <p>{{ message.created_at }}</p>
-    <p>{{ message.username}}さんより受信</p>
+    {% if message.icon.url != null %}
+    <p><img src="{{ message.icon.url }}" width=50px>
+    {% endif %}
+      {{ message.username}}さんより受信</p>
   </div>
     <p><a href = "{% url 'sendmessage' message.sendmessageid %}">{{ message.username}}さんへ返信する</a></p>
 
@@ -39,7 +42,11 @@
     <p><img src = "{{ message.image.url }}" class="img-fluid" alt="Responsive image" ></p>
   {% endif %}
   <p>{{ message.created_at }}</p>
-  <p>{{ message.username }}さんへ送信済</p>
+  {% if message.icon.url != null %}
+  <p><img src = "{{ message.icon.url }}" width=50px>
+  {% endif %}
+    {{ message.username }}さんへ送信済</p>
+
   </div>
 
   <p><a href = "{% url 'sendmessage' message.recieverid %}">{{ message.username }}さんへさらに送信する</a></p>

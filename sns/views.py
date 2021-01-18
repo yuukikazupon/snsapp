@@ -124,7 +124,6 @@ def goodfunc(request,pk):
         keijiban=Keijiban.objects.get(id=pk)
         goodman = Profile.objects.get(profileid_id=request.user.id).username
         if goodman in keijiban.goodtext :
-            print(keijiban.goodtext)
             return redirect("list")
 
         else:
@@ -182,7 +181,9 @@ def messagelistfunc(request,pk):
         profile_list1=[]
         profile_list2=[]
         sender_list=[]
+        sender_icon_list=[]
         reciever_list=[]
+        reciever_icon_list=[]
         new_recieve_message_list=[]
         new_send_message_list=[]
         for i in recieve_message_list.values("sendmessageid_id"):  #ログインしている人が受け取ったメッセージ一覧から送信者を出す
@@ -194,14 +195,17 @@ def messagelistfunc(request,pk):
         for s in profile_list:
             profile=Profile.objects.get(profileid_id=s)           #送信者のprofile情報を取得
             sender_list.append(profile.username)                  #送信者の名前をリストにする
+            sender_icon_list.append(profile.icon)
 
         for w in profile_list2:
             profile2=Profile.objects.get(id=w)                    #受信者のprofile情報を取得
             reciever_list.append(profile2.username)               #受信者の名前をリストにする
+            reciever_icon_list.append(profile2.icon)
 
         for t in range(len(recieve_message_list)):
             sender=model_to_dict(recieve_message_list[t])         #ログインしている人が受信するメッセージリスト(QuerySet)を辞書にする
             sender["username"]=sender_list[t]                     #送信者名を辞書に追加
+            sender["icon"]=sender_icon_list[t]
             new_recieve_message_list.append(sender)               #ログインしている人が受信するメッセージ一覧に送信者を追加
 
         for u in range(len(send_message_list)):
@@ -209,7 +213,9 @@ def messagelistfunc(request,pk):
             profileid=Profile.objects.get(id=profile_list2[u])    #受信する人のidがprofileのidと一致するprofile情報を取得
             reciever["recieverid"]=profileid.profileid_id         #取得したprofile情報からprofileid_id(ユーザーモデルのid)を取得して受信者として辞書に追加
             reciever["username"]=reciever_list[u]                 #受信者の名前を辞書に追加
+            reciever["icon"]=reciever_icon_list[u]
             new_send_message_list.append(reciever)                #ログインしている人が送ったメッセージ一覧に受信者を追加
+
 
         if len(new_send_message_list) == 0 :
             if len(new_recieve_message_list) == 0 :

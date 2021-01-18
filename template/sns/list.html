@@ -8,10 +8,10 @@
 
 <div class="container">
 
-  <div class="list-group">
+  <div class="list-group list-group-flush">
 
 {% for object in object_list %}
-  <div class="list-group-item">
+  <div class="list-group-item list-group-item-primary">
 
   <p>
   {% if object.icon.url != null %}
@@ -25,13 +25,13 @@
   <p>投稿：{{ object.toukou }}</p>
   </div>
   </div>
-    <div class="list-group-item">
+    <div class="list-group-item list-group-item-info">
   {% if object.image.url != null %}
     <p class="text-center"><img src = "{{ object.image.url }}" class="img-fluid" alt="Responsive image"></p>
 
   {% endif %}
     </div>
-    <div class="list-group-item">
+    <div class="list-group-item list-group-item-info">
   {% if request.user.id == object.authorid %}
 
       <a href = "{% url 'keijibanupdate' object.id %}">更新</a>
@@ -50,11 +50,15 @@
 
 
 
-    <div class="list-group-item">
+    <div class="list-group-item list-group-item-info">
     {% for comment in comment_list %}
       {% if comment.commentid_id  == object.id %}
       <div class="comment">
-          <p>{{ comment.commentfield }}　{{ comment.commentprofileid.username }}さん　{{ comment.created_at }}</p>
+          <p>
+            {{ comment.commentfield }}
+          <a href="{% url 'profiledetail' comment.commentprofileid_id %}">{{ comment.commentprofileid.username }}さん</a>
+            {{ comment.created_at }}
+          </p>
       </div>
       {% endif %}
     {% endfor %}
@@ -70,7 +74,7 @@
 
 
 
-      <div class="list-group-item">
+      <div class="list-group-item list-group-item-info">
         <div class = "pagination justify-content-center">
   {% if object_list.has_previous %}
     <a href = "{% url 'list' %}">&laquo;最初のページへ</a>
