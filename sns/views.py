@@ -51,8 +51,14 @@ def createfunc(request):
 
 def profilefunc(request):
     if request.method == "POST":
-        form = Profile.objects.create(username=request.POST["username"],age=request.POST["age"],sex=request.POST["sex"],address=request.POST["address"],icon=request.FILES.get("icon"),profileid_id=request.user.id)
-        return redirect("list")
+        if int(request.POST["age"]) > 150 :
+            obj=Profile()
+            profileform = ProfileForm(request.POST,request.FILES,instance=obj)
+            return render(request,"profile.html",{"profileform":profileform})
+
+        else:
+            profileform = Profile.objects.create(username=request.POST["username"],age=request.POST["age"],sex=request.POST["sex"],address=request.POST["address"],icon=request.FILES.get("icon"),profileid_id=request.user.id)
+            return redirect("list")
 
     else:
         try:
@@ -76,8 +82,11 @@ def profileupdatefunc(request):
         obj=Profile.objects.get(profileid_id=request.user.id)
         if request.method == "POST":
             profile_update=ProfileForm(request.POST,request.FILES,instance=obj)
-            profile_update.save()
-            return redirect("list")
+            if profile_update.is_valid():
+                profile_update.save()
+                return redirect("list")
+            else:
+                return render(request,"profileupdate.html",{"profile_update":profile_update})
 
         else:
             profile_update=ProfileForm(instance=obj)
@@ -195,17 +204,17 @@ def messagelistfunc(request,pk):
         for s in profile_list:
             profile=Profile.objects.get(profileid_id=s)           #送信者のprofile情報を取得
             sender_list.append(profile.username)                  #送信者の名前をリストにする
-            sender_icon_list.append(profile.icon)
+            sender_icon_list.append(profile.icon)                 #送信者のiconをリストにする
 
         for w in profile_list2:
             profile2=Profile.objects.get(id=w)                    #受信者のprofile情報を取得
             reciever_list.append(profile2.username)               #受信者の名前をリストにする
-            reciever_icon_list.append(profile2.icon)
+            reciever_icon_list.append(profile2.icon)              #受信者のiconをリストにする
 
         for t in range(len(recieve_message_list)):
             sender=model_to_dict(recieve_message_list[t])         #ログインしている人が受信するメッセージリスト(QuerySet)を辞書にする
             sender["username"]=sender_list[t]                     #送信者名を辞書に追加
-            sender["icon"]=sender_icon_list[t]
+            sender["icon"]=sender_icon_list[t]                    #送信者iconを辞書に追加
             new_recieve_message_list.append(sender)               #ログインしている人が受信するメッセージ一覧に送信者を追加
 
         for u in range(len(send_message_list)):
@@ -213,7 +222,7 @@ def messagelistfunc(request,pk):
             profileid=Profile.objects.get(id=profile_list2[u])    #受信する人のidがprofileのidと一致するprofile情報を取得
             reciever["recieverid"]=profileid.profileid_id         #取得したprofile情報からprofileid_id(ユーザーモデルのid)を取得して受信者として辞書に追加
             reciever["username"]=reciever_list[u]                 #受信者の名前を辞書に追加
-            reciever["icon"]=reciever_icon_list[u]
+            reciever["icon"]=reciever_icon_list[u]                #受信者のiconを辞書に追加
             new_send_message_list.append(reciever)                #ログインしている人が送ったメッセージ一覧に受信者を追加
 
 
