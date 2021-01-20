@@ -5,7 +5,7 @@ from .models import Keijiban,Profile,Comment,Message
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-# from accounts.models import CustomUser
+from accounts.models import CustomUser
 #追加
 from django.template.loader import render_to_string
 from django.http import JsonResponse
@@ -53,6 +53,7 @@ def profilefunc(request):
     if request.method == "POST":
         if int(request.POST["age"]) > 150 :
             obj=Profile()
+            print(obj)
             profileform = ProfileForm(request.POST,request.FILES,instance=obj)
             return render(request,"profile.html",{"profileform":profileform})
 
@@ -239,3 +240,9 @@ def messagelistfunc(request,pk):
 
     except:
         return redirect("profile")
+
+
+def guest_login(request):
+    guest_user = CustomUser.objects.get(email="guestuser@example.com")
+    login(request, guest_user, backend='django.contrib.auth.backends.ModelBackend')
+    return redirect('list')
