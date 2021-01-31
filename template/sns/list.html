@@ -51,9 +51,7 @@
 
 
   {% if request.user.id != object.authorid %}
-    <a id="like{{ object.id }}"  class="btn btn-primary" value="{{ object.id }}" role="button">いいね</a>
-    <a name="{{ object.id }}-count">{{ object.good }}{{ keijiban.good }}</a>
-    <a>人</a>
+    <button type="button" id="like{{ object.id }}"  class="btn btn-primary" value="{{ object.id }}" role="button">いいね<a name="{{ object.id }}-count">{{ object.good }}{{ keijiban.good }}</a>人</button>
     <a name="{{ object.id }}-count1">{{ object.goodtext }}{{ keijiban.goodtext }}</a>
 
   {% else %}

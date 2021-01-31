@@ -51,15 +51,14 @@ def createfunc(request):
 
 def profilefunc(request):
     if request.method == "POST":
-        if int(request.POST["age"]) > 150 :
-            obj=Profile()
-            # print(obj)
-            profileform = ProfileForm(request.POST,request.FILES,instance=obj)
-            return render(request,"profile.html",{"profileform":profileform})
-
-        else:
+        obj=Profile()
+        profileform = ProfileForm(request.POST,request.FILES,instance=obj)
+        if profileform.is_valid():
             profileform = Profile.objects.create(username=request.POST["username"],age=request.POST["age"],sex=request.POST["sex"],address=request.POST["address"],icon=request.FILES.get("icon"),profileid_id=request.user.id)
             return redirect("list")
+
+        else:
+            return render(request,"profile.html",{"profileform":profileform})
 
     else:
         try:
@@ -71,23 +70,6 @@ def profilefunc(request):
             return render(request,"profile.html",{"profileform":profileform})
 
 
-# def profilefunc(request):
-#     if request.method == "POST":
-#         obj=Profile.objects.create(username=request.POST["username"],age=request.POST["age"],sex=request.POST["sex"],address=request.POST["address"],icon=request.FILES.get("icon"),profileid_id=request.user.id)
-#
-#         profileform = ProfileForm(request.POST,request.FILES,instance=obj)
-#         return redirect("list")
-#
-#
-#
-#     else:
-#         try:
-#             Profile.objects.get(profileid_id=request.user.id)
-#             return redirect("list")
-#
-#         except:
-#             profileform = ProfileForm()
-#             return render(request,"profile.html",{"profileform":profileform})
 
 
 def profiledetailfunc(request,pk):
@@ -144,31 +126,12 @@ def keijibandeletefunc(request,pk):
     except:
         return redirect("profile")
 
-# @login_required
-# def goodfunc(request,pk):
-#     try:
-#         Profile.objects.get(profileid_id=request.user.id)
-#
-#         keijiban=Keijiban.objects.get(id=pk)
-#         goodman = Profile.objects.get(profileid_id=request.user.id).username
-#         if goodman in keijiban.goodtext :
-#             return redirect("list")
-#
-#         else:
-#             keijiban.goodtext = keijiban.goodtext + " " + goodman + "さん"
-#             keijiban.good+=1
-#             keijiban.save()
-#             return redirect("list")
-#     except:
-#         return redirect("profile")
+
 
 @login_required
 def goodfunc(request,pk):
-    print("cccccc")
     try:
         Profile.objects.get(profileid_id=request.user.id)
-        print("pk",pk)
-        print("request",request)
         keijiban=Keijiban.objects.get(id=pk)
         goodman = Profile.objects.get(profileid_id=request.user.id).username
         if goodman in keijiban.goodtext :
@@ -178,8 +141,6 @@ def goodfunc(request,pk):
                 'good_man':keijiban.goodtext
             }
             if request.is_ajax():
-                print("bbbbbbb")
-                print(data)
                 return JsonResponse(data)
 
         else:
@@ -192,7 +153,6 @@ def goodfunc(request,pk):
                 'good_man':keijiban.goodtext
             }
             if request.is_ajax():
-                print("aaaaaaa")
                 return JsonResponse(data)
     except:
         return redirect("profile")
