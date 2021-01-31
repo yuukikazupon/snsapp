@@ -1,9 +1,19 @@
 {% extends "base.html" %}
+{% block custumcss %}
 {% load static %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+
+
+{% endblock custumcss %}
+
+
 {% block content %}
 
 
 <link rel="stylesheet" href="{% static 'list.css' %}">
+
+
 <h1 style="text-align:center">投稿一覧</h1>
 
 <div class="container">
@@ -41,13 +51,40 @@
 
 
   {% if request.user.id != object.authorid %}
-    <a class="btn btn-primary" href="{% url 'good' object.id %}"　role="button" >いいね{{ object.good }}</a>
-    {{ object.goodtext }}
-  {% else %}
-    <p><a class="btn btn-primary" id="btn">いいね{{ object.good }}</a></p>
-  {% endif %}
-    </div>
+    <a id="like{{ object.id }}"  class="btn btn-primary" value="{{ object.id }}" role="button">いいね</a>
+    <a name="{{ object.id }}-count">{{ object.good }}{{ keijiban.good }}</a>
+    <a>人</a>
+    <a name="{{ object.id }}-count1">{{ object.goodtext }}{{ keijiban.goodtext }}</a>
 
+  {% else %}
+    <p><a class="btn btn-primary" id="btn">いいね</a>
+    <a>{{ object.good }}{{ object.goodtext}}</a></p>
+  {% endif %}
+
+<script type="text/javascript">
+  $(document).ready(function(event){
+    $(document).on('click', '#like{{ object.id }}', function(event){
+      event.preventDefault();
+        $.ajax({
+          type: 'GET',
+          url: "{% url 'good' object.id %}",
+          data:{
+            'object_id': $(this).attr('value'),
+            'csrfmiddlewaretoken': '{{ csrf_token }}'},
+          dataType: 'json',
+          success: function(response){
+            selector2 = document.getElementsByName(response.object_id + "-count");
+            selector3 = document.getElementsByName(response.object_id + "-count1");
+            $(selector2).text(response.good_count);
+            $(selector3).text(response.good_man);
+          }
+        })
+      });
+    });
+</script>
+
+
+   </div>
 
 
     <div class="list-group-item list-group-item-info">
@@ -66,13 +103,9 @@
     </div>
 
 
+
+
 {% endfor %}
-
-
-
-
-
-
 
       <div class="list-group-item list-group-item-info">
         <div class = "pagination justify-content-center">
@@ -98,7 +131,6 @@
       </div>
     </div>
 </div>
-
 
 
 {% endblock content %}
