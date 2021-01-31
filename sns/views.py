@@ -49,6 +49,7 @@ def createfunc(request):
     except:
         return redirect("profile")
 
+@login_required
 def profilefunc(request):
     if request.method == "POST":
         obj=Profile()
