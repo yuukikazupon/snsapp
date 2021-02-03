@@ -15,7 +15,7 @@ SECRET_KEY = 'q8ncy_!bq(@#he8v$bj2lk=@xya7juivc)wba!trp649^2(8w$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,6 +44,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'snsapp.urls'
@@ -86,12 +87,11 @@ DATABASES = {
         'HOST':'',
         'PORT':''
     }
-
-
-
-
 }
 
+import dj_database_url
+DATABASES['default']= dj_database_url.config()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWADED_PROTO','https')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -169,3 +169,5 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 MEDIA_URL = "/media/"
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
