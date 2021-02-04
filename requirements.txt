@@ -57,10 +57,12 @@ decorator==4.4.1
 defusedxml==0.6.0
 diff-match-patch==20181111
 distributed==2.11.0
+dj-database-url==0.5.0
 Django==3.1.2
 django-allauth==0.43.0
 django-bootstrap4==2.3.1
 django-decorator-include==3.0
+django-heroku==0.3.1
 docutils==0.16
 entrypoints==0.3
 et-xmlfile==1.0.1
@@ -250,6 +252,7 @@ watchdog==0.10.2
 wcwidth==0.1.8
 webencodings==0.5.1
 Werkzeug==1.0.0
+whitenoise==5.2.0
 widgetsnbextension==3.5.1
 wrapt==1.11.2
 wurlitzer==2.0.0
@@ -262,6 +265,3 @@ yapf==0.28.0
 zict==1.0.0
 zipp==2.2.0
 zope.interface==5.1.2
-dj-database-url
-whitenoise
-django-heroku
