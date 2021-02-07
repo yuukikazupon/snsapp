@@ -8,6 +8,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -16,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True  #ローカルの設定
-DEBUG = True    #本番環境の設定
+DEBUG = False    #本番環境の設定
 
 ALLOWED_HOSTS = ['*']
 
@@ -170,11 +171,6 @@ AUTH_USER_MODEL='accounts.CustomUser'
 
 STATIC_URL = '/static/'
 
-if not DEBUG:
-    SECRET_KEY = os.environ['SECRET_KEY']
-    import django_heroku
-    django_heroku.settings(locals())
-
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,"static")
@@ -185,3 +181,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 MEDIA_URL = "/media/"
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+if not DEBUG:
+    from .local_settings import *
+    SECRET_KEY = SECRET_KEY
+    import django_heroku
+    django_heroku.settings(locals())
