@@ -15,10 +15,11 @@ ADDRESS_CHOICE=[["北海道","北海道"],["青森県","青森県"],["秋田県"
 ["佐賀県","佐賀県"],["熊本県","熊本県"],["宮崎県","宮崎県"],["長崎県","長崎県"],["鹿児島県","鹿児島県"],["沖縄県","沖縄県"]]
 
 
+
 class Profile(models.Model):
     profileid=models.OneToOneField('accounts.CustomUser',on_delete=models.CASCADE)
     username=models.CharField('ユーザー名',max_length=30)
-    age = models.IntegerField('年齢',validators=[MinValueValidator(0),MaxValueValidator(150)])
+    age = models.PositiveIntegerField('年齢',validators=[MinValueValidator(0),MaxValueValidator(150)])
     sex = models.CharField('性別',
         max_length=10,
         choices = GENDER_CHOICE,
@@ -34,9 +35,10 @@ class Profile(models.Model):
 class Keijiban(models.Model) :
     authorid = models.ForeignKey('accounts.CustomUser',on_delete=models.CASCADE)
     toukou = models.TextField('投稿内容')
-    image = models.ImageField(upload_to="media/media/",null=True,blank=True)
+    image = models.ImageField('画像',upload_to="media/media/",null=True,blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     good = models.IntegerField(null=True,blank=True,default=0)
+    goodtext = models.CharField(max_length=10000,null=True,blank=True,default="👍")
 
 
 class Comment(models.Model):
@@ -49,6 +51,6 @@ class Comment(models.Model):
 class Message(models.Model):
     sendmessageid = models.ForeignKey('accounts.CustomUser',on_delete=models.CASCADE)
     recievemessageid = models.ForeignKey(Profile,on_delete=models.CASCADE)
-    message = models.TextField('メッセージ')
+    message = models.TextField('メッセージ',null=True,blank=True)
     image = models.ImageField(upload_to = "media/media/",null=True,blank=True)
     created_at = models.DateTimeField(default=timezone.now)

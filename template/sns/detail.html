@@ -1,17 +1,23 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
-
+<link rel="stylesheet" href="{% static 'detail.css' %}">
+<div class="container">
+<h2>{{ profile_detail.username }}さんのプロフィール</h2>
+<h2>
 <p>{{ profile_detail.username }}</p>
 <p>{{ profile_detail.age }}才</p>
 <p>{{ profile_detail.sex }}</p>
 <p>{{ profile_detail.address }}</p>
+
 {% if profile_detail.icon.url != null %}
-  <p><img src = "{{ profile_detail.icon.url }}" width=300px ></p>
+  <p><img src = "{{ profile_detail.icon.url }}" class="img-fluid" alt="Responsive image" ></p>
 
 {% endif %}
 {% if request.user.id != profile_detail.profileid_id %}
-<p><a href = "{% url 'sendmessage' profile_detail.profileid_id %}">メッセージを送る</a><p>
+<p><a href = "{% url 'sendmessage' profile_detail.profileid_id %}">{{ profile_detail.username }}さんへメッセージを送る</a></p>
 {% endif %}
-<p><a href = "{% url 'list' %}">投稿一覧画面へ戻る</a></p>
+<!-- <p><a href = "{% url 'list' %}">投稿一覧画面へ戻る</a></p> -->
+</h2>
+</div>
 {% endblock %}

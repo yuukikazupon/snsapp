@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import listfunc,createfunc,profilefunc,profiledetailfunc,profileupdatefunc,keijibandeletefunc,\
-    keijibanupdatefunc,goodfunc,commentcreatefunc,sendmessagefunc,messagelistfunc
+    keijibanupdatefunc,goodfunc,commentcreatefunc,sendmessagefunc,messagelistfunc,guest_login
 from django.conf.urls import url
+
 
 
 urlpatterns = [
@@ -17,6 +18,7 @@ urlpatterns = [
     path("commentcreate/<int:pk>",commentcreatefunc,name="commentcreate"),
     path("sendmessage/<int:pk>",sendmessagefunc,name="sendmessage"),
     path("messagelist/<int:pk>",messagelistfunc,name="messagelist"),
+    path("guest_login/",guest_login,name="guest_login"),
 
 
 

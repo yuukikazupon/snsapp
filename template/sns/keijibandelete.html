@@ -1,18 +1,24 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'keijibandelete.css' %}">
+<div class="container">
+ <div class="text-center">
 <form action = "" method ="POST" enctype="multipart/form-data">{% csrf_token %}
 <p>{{ keijiban_delete.toukou }}</p>
 
 {% if obj.image.url != null %}
-<p><img src = "{{ obj.image.url }}" width=300px ></p>
+<p><img src = "{{ obj.image.url }}" class="img-fluid" alt="Responsive image" ></p>
 {% endif %}
 
 <p>{{ keijiban_delete.created_at }}</p>
 
 <input type = "submit" value = "削除">
 </form>
-<a href = "{% url 'list' %}">一覧画面へ戻る</a>
+
+  </div>
+</div>
+<!-- <a href = "{% url 'list' %}">一覧画面へ戻る</a> -->
 
 
 {% endblock %}

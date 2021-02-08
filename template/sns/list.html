@@ -1,56 +1,112 @@
 {% extends "base.html" %}
+{% block custumcss %}
+{% load static %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+
+
+{% endblock custumcss %}
+
 
 {% block content %}
 
+
+<link rel="stylesheet" href="{% static 'list.css' %}">
+
+
+<h1 style="text-align:center">投稿一覧</h1>
+
+<div class="container">
+
+  <div class="list-group list-group-flush">
+
 {% for object in object_list %}
+  <div class="list-group-item list-group-item-primary">
 
+  <p>
+  {% if object.icon.url != null %}
+  <img src = "{{ object.icon.url }}" width=100px>
+  {% endif %}
+  <a href = "{% url 'profiledetail' object.authorid %}">{{ object.username }}さん </a>
+  </p>
 
-  <p>投稿者:<a href = "{% url 'profiledetail' object.authorid %}">{{ object.username }}</a></p>
+  <div class="toukou">
   <p>{{ object.created_at }}</p>
   <p>投稿：{{ object.toukou }}</p>
-
+  </div>
+  </div>
+    <div class="list-group-item list-group-item-info">
   {% if object.image.url != null %}
-    <p><img src = "{{ object.image.url }}" width=300px ></p>
+    <p class="text-center"><img src = "{{ object.image.url }}" class="img-fluid" alt="Responsive image"></p>
 
   {% endif %}
-
+    </div>
+    <div class="list-group-item list-group-item-info">
   {% if request.user.id == object.authorid %}
-    <div>
+
       <a href = "{% url 'keijibanupdate' object.id %}">更新</a>
       <a href = "{% url 'keijibandelete' object.id %}">削除</a>
-    </div>
+
   {% endif %}
+
 
   {% if request.user.id != object.authorid %}
-  <div>
-    <a href = "{% url 'good' object.id %}">いいね{{ object.good }}</a>
-  </div>
+    <button type="button" id="like{{ object.id }}"  class="btn btn-primary" value="{{ object.id }}" role="button">いいね<a name="{{ object.id }}-count">{{ object.good }}{{ keijiban.good }}</a>人</button>
+    <a name="{{ object.id }}-count1">{{ object.goodtext }}{{ keijiban.goodtext }}</a>
+
   {% else %}
-    <p>いいね{{ object.good }}</p>
+    <p><a class="btn btn-primary" id="btn">いいね</a>
+    <a>{{ object.good }}{{ object.goodtext}}</a></p>
   {% endif %}
 
+<script type="text/javascript">
+  $(document).ready(function(event){
+    $(document).on('click', '#like{{ object.id }}', function(event){
+      event.preventDefault();
+        $.ajax({
+          type: 'GET',
+          url: "{% url 'good' object.id %}",
+          data:{
+            'object_id': $(this).attr('value'),
+            'csrfmiddlewaretoken': '{{ csrf_token }}'},
+          dataType: 'json',
+          success: function(response){
+            selector2 = document.getElementsByName(response.object_id + "-count");
+            selector3 = document.getElementsByName(response.object_id + "-count1");
+            $(selector2).text(response.good_count);
+            $(selector3).text(response.good_man);
+          }
+        })
+      });
+    });
+</script>
 
-  <div>
+
+   </div>
+
+
+    <div class="list-group-item list-group-item-info">
     {% for comment in comment_list %}
       {% if comment.commentid_id  == object.id %}
-          <p>コメント：{{ comment.commentfield }}　{{ comment.commentprofileid.username }}さん　{{ comment.created_at }}</p>
+      <div class="comment">
+          <p>
+            {{ comment.commentfield }}
+          <a href="{% url 'profiledetail' comment.commentprofileid_id %}">{{ comment.commentprofileid.username }}さん</a>
+            {{ comment.created_at }}
+          </p>
+      </div>
       {% endif %}
     {% endfor %}
     <a href = "{% url 'commentcreate' object.id %}">コメントする</a>
-  </div>
+    </div>
+
+
 
 
 {% endfor %}
 
-
-
-
-<p><a href = "{% url 'create' %}">新規投稿画面へ</a></p>
-<p><a href = "{% url 'profileupdate' %}">プロフィール編集画面へ</a></p>
-<p><a href = "{% url 'messagelist' request.user.id %}">メッセージ一覧画面へ</a></p>
-<p><a href = "{% url 'account_logout' %}">ログアウト</a></p>
-
-<div class = "pagination">
+      <div class="list-group-item list-group-item-info">
+        <div class = "pagination justify-content-center">
   {% if object_list.has_previous %}
     <a href = "{% url 'list' %}">&laquo;最初のページへ</a>
     <a href = "{% url 'list' %}{{object_list.previous_page_number}}">&laquo;前へ</a>
@@ -69,7 +125,10 @@
     <a href="{% url 'list' %}{{ object_list.next_page_number }}">次へ&raquo;</a>
     <a href="{% url 'list' %}{{ object_list.paginator.num_pages}}">最後のページへ&raquo;</a>
   {% endif %}
-
+        </div>
+      </div>
+    </div>
+</div>
 
 
 {% endblock content %}
