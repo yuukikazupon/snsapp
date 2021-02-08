@@ -1,23 +1,26 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
-
-
+<link rel="stylesheet" href="{% static 'keijibanupdate.css' %}">
+<div class="container">
+ <div class="text-center">
 
 <form action = "" method ="POST" enctype="multipart/form-data">{% csrf_token %}
+  {% if obj.image.url != null %}
+  <p>現在の画像<img src = "{{ obj.image.url }}" class="img-fluid" alt="Responsive image" ></p>
+  {% endif %}
 
   <p>{{ keijiban_update.as_p }}</p>
 
 <input type = "submit" value = "更新">
 </form>
 
-<a href = "{% url 'list' %}">一覧画面へ戻る</a>
+  </div>
+</div>
+<!-- <a href = "{% url 'list' %}">一覧画面へ戻る</a> -->
 
-{% if keijiban_update.image.url != null %}
-aaaaaaaa
-<p><img src = "{{ keijiban_update.image.url }}" width=300px ></p>
-{% else %}
-bbbbbbbbb
-{% endif %}
+
+
+
 
 {% endblock %}

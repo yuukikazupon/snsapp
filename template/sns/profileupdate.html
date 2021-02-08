@@ -1,18 +1,27 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
-
+<link rel="stylesheet" href="{% static 'profileupdate.css' %}">
+<div class="container">
+ <div class="text-center">
 <form action ="" method ="POST" enctype="multipart/form-data">{% csrf_token %}
+
+{% if obj.icon.url != null %}
+<p>現在のicon<img src = "{{ obj.icon.url }}" width=300px ></p>
+{% endif %}
+{{ message }}
 {{ profile_update.as_p }}
+
+
 
 <input type="submit" value = "保存">
 </form>
 
-<a href = "{% url 'list' %}">一覧画面へ戻る</a>
+  </div>
+</div>
+<!-- <a href = "{% url 'list' %}">一覧画面へ戻る</a> -->
 
-{% if profile_update.icon.url != null %}
-<p><img src = "{{ profile_update.icon.url }}" width=300px ></p>
-{% endif %}
+
 
 
 
