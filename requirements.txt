@@ -261,7 +261,6 @@ pyobjc-framework-AdSupport==7.1
 pyobjc-framework-AppleScriptKit==7.1
 pyobjc-framework-AppleScriptObjC==7.1
 pyobjc-framework-ApplicationServices==7.1
-pyobjc-framework-AutomaticAssessmentConfiguration==7.1
 pyobjc-framework-Automator==7.1
 pyobjc-framework-AVFoundation==7.1
 pyobjc-framework-AVKit==7.1
