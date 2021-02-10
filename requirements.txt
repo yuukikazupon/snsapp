@@ -262,7 +262,6 @@ pyobjc-framework-AppleScriptKit==7.1
 pyobjc-framework-AppleScriptObjC==7.1
 pyobjc-framework-ApplicationServices==7.1
 pyobjc-framework-Automator==7.1
-pyobjc-framework-AVKit==7.1
 pyobjc-framework-BusinessChat==7.1
 pyobjc-framework-CalendarStore==7.1
 pyobjc-framework-CFNetwork==7.1
