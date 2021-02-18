@@ -182,6 +182,11 @@ MEDIA_URL = "/media/"
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+try:
+    from .local_settings import *
+except ImportError:
+    pass
+
 if not DEBUG:
     from .local_settings import *
     SECRET_KEY = 'q8ncy_!bq(@#he8v$bj2lk=@xya7juivc)wba!trp649^2(8w$'
