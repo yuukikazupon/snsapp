@@ -189,6 +189,6 @@ except ImportError:
 
 if not DEBUG:
     from .local_settings import *
-    SECRET_KEY = 'q8ncy_!bq(@#he8v$bj2lk=@xya7juivc)wba!trp649^2(8w$'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     import django_heroku
     django_heroku.settings(locals())

@@ -13,6 +13,7 @@ from django.http import JsonResponse
 
 
 
+
 def listfunc(request,now_page=1):
     object_list=Keijiban.objects.all().order_by("created_at").reverse()
     comment_list=Comment.objects.all().order_by("created_at").reverse()
