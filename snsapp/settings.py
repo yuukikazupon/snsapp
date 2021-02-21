@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'bootstrap4',
+    'cloudinary',
+    'cloudinary_storage',
 ]
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -192,3 +195,9 @@ if not DEBUG:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     import django_heroku
     django_heroku.settings(locals())
+
+CLOUDINARY_STORAGE = {
+'CLOUD_NAME': 'diigweiwb',
+'API_KEY': '618578942668443',
+'API_SECRET': 'P50SH0-N9RwjFTD2O_Eo_e1D4MQ'
+}

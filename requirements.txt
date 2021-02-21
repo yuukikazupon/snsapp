@@ -5,6 +5,7 @@ Django==3.1.6
 django-toolbelt==0.0.1
 django-allauth==0.43.0
 django-bootstrap4==2.3.1
+dj3-cloudinary-storage==0.0.3
 gunicorn==20.0.4
 psycopg2==2.8.6
 pytz==2021.1

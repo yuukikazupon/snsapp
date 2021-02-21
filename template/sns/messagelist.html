@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cloudinary %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'messagelist.css' %}">
 <div class="row mx-lg-n5">
@@ -13,11 +14,11 @@
     <p>{{ message.message }}</p>
 
     {% if message.image.url != null %}
-      <p><img src = "{{ message.image.url }}" class="img-fluid" alt="Responsive image" ></p>
+      <p><img src = "{{ cloudinary message.image.url }}" class="img-fluid" alt="Responsive image" ></p>
     {% endif %}
     <p>{{ message.created_at }}</p>
     {% if message.icon.url != null %}
-    <p><img src="{{ message.icon.url }}" width=50px>
+    <p><img src="{{ cloudinary message.icon.url }}" width=50px>
     {% endif %}
       {{ message.username}}さんより受信</p>
   </div>
