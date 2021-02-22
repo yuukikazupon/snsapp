@@ -1,6 +1,6 @@
 from django import forms
 from .models import Profile,Keijiban,Comment,Message
-from cloudinary.forms import CloudinaryFileField
+
 
 class KeijibanForm(forms.ModelForm) :
     class Meta :
