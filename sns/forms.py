@@ -1,6 +1,7 @@
 from django import forms
 from .models import Profile,Keijiban,Comment,Message
 
+
 class KeijibanForm(forms.ModelForm) :
     class Meta :
         model = Keijiban

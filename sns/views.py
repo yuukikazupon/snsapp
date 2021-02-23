@@ -185,7 +185,7 @@ def sendmessagefunc(request,pk):
         if request.method == "POST":
             sendmessage = Message.objects.create(message=request.POST["message"],image=request.FILES.get("image"),sendmessageid_id=request.user.id,recievemessageid_id=profile.id)
             sendmessage.save()
-            return redirect("list")
+            return redirect("messagelist",request.user.id)
 
         else :
             sendmessage=SendMessageForm()

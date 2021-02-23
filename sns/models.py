@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator,MaxValueValidator
 
 
 
+
 GENDER_CHOICE=[["男性","男性"],["女性","女性"]]
 ADDRESS_CHOICE=[["北海道","北海道"],["青森県","青森県"],["秋田県","秋田県"],["岩手県","岩手県"],["山形県","山形県"],\
 ["宮城県","宮城県"],["新潟県","新潟県"],["福島県","福島県"],["栃木県","栃木県"],["茨城県","茨城県"],["石川県","石川県"],\
