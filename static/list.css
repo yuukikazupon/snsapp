@@ -35,14 +35,17 @@
   display: inline-block;
   position: relative;
   margin: 0;
-  padding: 0 30px;
+  padding: 0 80px;
   line-height: 80px;
   font-size: 40px;
   color: #8a2be2;
   text-shadow: 0 0 2px #FFF;
   background: -webkit-repeating-linear-gradient(-45deg, #f0e68c, #f0e68c 3px,#ffff00 3px, #ffff00 7px);
   background: repeating-linear-gradient(-45deg, #f0e68c, #f0e68c 3px,#ffff00 3px, #ffff00 7px);
-
+  letter-spacing:0.7em;
+  font-weight: bold;
+  text-shadow: 3px 3px 4px silver;
+  font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;  
 }
 
 .ribbon10 h1:before {
