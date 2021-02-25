@@ -1,9 +1,85 @@
+.ribbon10 {
+  display: inline-block;
+  position: relative;
+  height: 80px;
+  text-align: center;
+  box-sizing: border-box;
+
+}
+
+.ribbon10:before {
+  content: '';
+  position: absolute;
+  width: 70px;
+  bottom: -10px;
+  left: -55px;
+  z-index: -2;
+  border: 30px solid #ffdc00;
+  border-left-color: transparent;
+
+}
+
+.ribbon10:after {
+  content: '';
+  position: absolute;
+  width: 70px;
+  bottom: -10px;
+  right: -55px;
+  z-index: -2;
+  border: 30px solid #ffdc00;
+  border-right-color: transparent;
+
+}
+.ribbon10 h1 {
+
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 0 30px;
+  line-height: 80px;
+  font-size: 40px;
+  color: #8a2be2;
+  text-shadow: 0 0 2px #FFF;
+  background: -webkit-repeating-linear-gradient(-45deg, #f0e68c, #f0e68c 3px,#ffff00 3px, #ffff00 7px);
+  background: repeating-linear-gradient(-45deg, #f0e68c, #f0e68c 3px,#ffff00 3px, #ffff00 7px);
+
+}
+
+.ribbon10 h1:before {
+
+  position: absolute;
+  content: '';
+  top: 100%;
+  left: 0;
+  border: none;
+  border-bottom: solid 10px transparent;
+  border-right: solid 15px #eddc44;
+
+}
+
+.ribbon10 h1:after {
+
+  position: absolute;
+  content: '';
+  top: 100%;
+  right: 0;
+  border: none;
+  border-bottom: solid 10px transparent;
+  border-left: solid 15px #eddc44;
+
+}
+
+.ribbon{
+  text-align:center;
+  margin:20px;
+}
+
+
 body{
     background-image: url("images/downtown-4045037_1920.jpg");
     background-size: 100%;
     /* background-repeat: no-repeat; */
     background-color:rgba(255,255,255,0.5);
     background-blend-mode:lighten;
-
 
 }
